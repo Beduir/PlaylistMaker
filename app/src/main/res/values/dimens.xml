@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title">22sp</dimen>
+    <dimen name="main_menu">22sp</dimen>
+    <dimen name="settings_menu">16sp</dimen>
+    <dimen name="main_button_corner_radius">16dp</dimen>
+    <dimen name="main_button_icon_padding">10dp</dimen>
+    <dimen name="main_button_spacing">16dp</dimen>
+    <dimen name="settings_button_horizontal_padding">16dp</dimen>
+    <dimen name="settings_button_vertical_padding">24dp</dimen>
+</resources>
