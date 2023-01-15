@@ -6,10 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/main_background"
-    android:paddingLeft="16dp"
-    android:paddingTop="14dp"
-    android:paddingRight="16dp"
-    android:paddingBottom="14dp"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="14dp"
     tools:context=".MainActivity">
 
     <TextView

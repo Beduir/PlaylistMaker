@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/settings_background"
-    android:paddingTop="20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/settings_button_horizontal_padding"
+    android:paddingTop="20dp">
 
     <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
         android:orientation="horizontal"
         tools:ignore="MissingConstraints">
 
@@ -28,22 +28,19 @@
             tools:ignore="ContentDescription" />
 
         <TextView
-            android:layout_marginStart="28dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
+            android:layout_marginStart="28dp"
             android:text="@string/settings"
-            android:textSize="@dimen/title"
-            android:textColor="@color/text_color" />
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/title" />
     </LinearLayout>
 
     <Switch
-        android:paddingLeft="@dimen/settings_button_horizontal_padding"
-        android:paddingRight="@dimen/settings_button_horizontal_padding"
-        android:paddingTop="@dimen/settings_button_vertical_padding"
-        android:paddingBottom="@dimen/settings_button_vertical_padding"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/settings_button_vertical_padding"
         android:text="@string/black_theme"
         android:textColor="@color/text_color"
         android:textSize="@dimen/settings_menu"
@@ -53,45 +50,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/settings_background"
-        android:paddingLeft="@dimen/settings_button_horizontal_padding"
-        android:paddingTop="@dimen/settings_button_vertical_padding"
-        android:paddingRight="@dimen/settings_button_horizontal_padding"
-        android:paddingBottom="@dimen/settings_button_vertical_padding"
+        android:drawableEnd="@drawable/share"
+        android:paddingVertical="@dimen/settings_button_vertical_padding"
         android:text="@string/share_app"
         android:textAlignment="textStart"
         android:textColor="@color/text_color"
         android:textSize="@dimen/settings_menu"
-        android:drawableEnd="@drawable/share"
         tools:ignore="UseCompatTextViewDrawableXml" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/settings_background"
-        android:paddingLeft="@dimen/settings_button_horizontal_padding"
-        android:paddingTop="@dimen/settings_button_vertical_padding"
-        android:paddingRight="@dimen/settings_button_horizontal_padding"
-        android:paddingBottom="@dimen/settings_button_vertical_padding"
+        android:drawableEnd="@drawable/support"
+        android:paddingVertical="@dimen/settings_button_vertical_padding"
         android:text="@string/write_to_support"
         android:textAlignment="textStart"
         android:textColor="@color/text_color"
         android:textSize="@dimen/settings_menu"
-        android:drawableEnd="@drawable/support"
         tools:ignore="UseCompatTextViewDrawableXml" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/settings_background"
-        android:paddingLeft="@dimen/settings_button_horizontal_padding"
-        android:paddingTop="@dimen/settings_button_vertical_padding"
-        android:paddingRight="@dimen/settings_button_horizontal_padding"
-        android:paddingBottom="@dimen/settings_button_vertical_padding"
+        android:drawableEnd="@drawable/forward_arrow"
+        android:paddingVertical="@dimen/settings_button_vertical_padding"
         android:text="@string/user_agreement"
         android:textAlignment="textStart"
         android:textColor="@color/text_color"
         android:textSize="@dimen/settings_menu"
-        android:drawableEnd="@drawable/forward_arrow"
         tools:ignore="UseCompatTextViewDrawableXml" />
 
 </LinearLayout>
