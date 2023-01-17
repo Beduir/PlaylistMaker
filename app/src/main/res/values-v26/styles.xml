@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SettingsMenuItemStyle" parent="BaseSettingsMenuItemStyle">
+        <item name="android:paddingVertical">@dimen/settings_button_vertical_padding</item>
+    </style>
+</resources>
