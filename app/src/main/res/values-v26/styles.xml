@@ -3,4 +3,7 @@
     <style name="SettingsMenuItemStyle" parent="BaseSettingsMenuItemStyle">
         <item name="android:paddingVertical">@dimen/settings_button_vertical_padding</item>
     </style>
+    <style name="ActivityTitleView" parent="BaseActivityTitleView">
+        <item name="android:layout_marginHorizontal">4dp</item>
+    </style>
 </resources>

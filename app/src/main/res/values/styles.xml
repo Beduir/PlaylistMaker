@@ -4,28 +4,54 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:backgroundTint">@color/main_button_background</item>
+        <item name="android:backgroundTint">@color/ys_white</item>
         <item name="android:layout_marginTop">@dimen/main_button_spacing</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/main_menu</item>
-        <item name="android:textColor">@color/plm_black</item>
+        <item name="android:textColor">@color/ys_black</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="cornerRadius">@dimen/main_button_corner_radius</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/main_button_icon_padding</item>
-        <item name="iconTint">@color/plm_black</item>
+        <item name="iconTint">@color/ys_black</item>
     </style>
     <style name="BaseSettingsMenuItemStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:backgroundTint">@color/settings_background</item>
+        <item name="android:backgroundTint">@color/ys_white</item>
         <item name="android:textAlignment">textStart</item>
-        <item name="android:textColor">@color/plm_black</item>
+        <item name="android:textColor">?attr/settings_text_color</item>
         <item name="android:textSize">@dimen/settings_menu</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
     <style name="SettingsMenuItemStyle" parent="BaseSettingsMenuItemStyle">
         <item name="android:paddingTop">@dimen/settings_button_vertical_padding</item>
         <item name="android:paddingBottom">@dimen/settings_button_vertical_padding</item>
+    </style>
+    <style name="BaseActivityTitleView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+    <style name="ActivityTitleView" parent="BaseActivityTitleView">
+        <item name="android:layout_marginLeft">4dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+    </style>
+    <style name="ActivityBackButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:src">@drawable/left_arrow</item>
+        <item name="android:contentDescription">@string/finish</item>
+        <item name="iconTint">?attr/settings_text_color</item>
+    </style>
+    <style name="ActivityTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">start</item>
+        <item name="android:layout_marginStart">28dp</item>
+        <item name="android:textColor">?attr/settings_text_color</item>
+        <item name="android:textSize">@dimen/title</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 </resources>
