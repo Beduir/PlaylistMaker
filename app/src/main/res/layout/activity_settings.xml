@@ -24,6 +24,7 @@
     </LinearLayout>
 
     <Switch
+        android:id="@+id/dark_theme"
         android:text="@string/black_theme"
         tools:ignore="UseSwitchCompatOrMaterialXml"
         style="@style/SettingsMenuItemStyle" />
