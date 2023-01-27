@@ -29,24 +29,27 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         shareButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, this.getString(R.string.share_url));
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.share_url))
+            }
             startActivity(shareIntent)
         }
 
         supportButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_SENDTO)
-            shareIntent.data = Uri.parse("mailto:")
-            shareIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(this.getString(R.string.support_mail)))
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, this.getString(R.string.support_mail_subject))
-            shareIntent.putExtra(Intent.EXTRA_TEXT, this.getString(R.string.support_mail_body))
+            val shareIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_mail)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_mail_subject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_mail_body))
+            }
             startActivity(shareIntent)
         }
 
         userAgreementButton.setOnClickListener {
-            val shareIntent = Intent(Intent.ACTION_VIEW)
-            shareIntent.data = Uri.parse(this.getString(R.string.user_agreement_url))
+            val shareIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse(getString(R.string.user_agreement_url))
+            }
             startActivity(shareIntent)
         }
 

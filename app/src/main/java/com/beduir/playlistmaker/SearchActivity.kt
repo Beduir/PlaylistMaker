@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SearchActivity : AppCompatActivity() {
     // Реализуем сохранение, как требуется в ТЗ. Хотя для TextEdit оно и так само работает.
+    private lateinit var inputSearchText: EditText
+
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val SEARCH_TEXT_POSITION = "SEARCH_TEXT_POSITION"
@@ -23,8 +25,15 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
 
         val backButton = findViewById<ImageView>(R.id.back_button)
-        val inputSearchText = findViewById<EditText>(R.id.search_text)
+        inputSearchText = findViewById<EditText>(R.id.search_text)
         val clearButton = findViewById<ImageView>(R.id.clear_icon)
+
+        if (savedInstanceState != null) {
+            searchText = savedInstanceState.getString(SEARCH_TEXT, "")
+            inputSearchText.setText(searchText)
+            inputSearchText.setSelection(savedInstanceState.getInt(
+                SEARCH_TEXT_POSITION, 0))
+        }
 
         clearButton.setOnClickListener {
             inputSearchText.setText("")
@@ -40,10 +49,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                searchText = inputSearchText?.toString() ?: ""
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchText = inputSearchText.text.toString()
+                // empty
             }
         }
         inputSearchText.addTextChangedListener(simpleTextWatcher)
@@ -55,18 +65,10 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val inputSearchText = findViewById<EditText>(R.id.search_text)
-        outState.putString(SEARCH_TEXT, searchText)
-        outState.putInt(SEARCH_TEXT_POSITION, inputSearchText.selectionStart)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        val inputSearchText = findViewById<EditText>(R.id.search_text)
-        searchText = savedInstanceState.getString(SEARCH_TEXT, "")
-        inputSearchText.setText(searchText)
-        inputSearchText.setSelection(savedInstanceState.getInt(
-            SEARCH_TEXT_POSITION, 0))
+        outState.apply {
+            putString(SEARCH_TEXT, searchText)
+            putInt(SEARCH_TEXT_POSITION, inputSearchText.selectionStart)
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
