@@ -7,10 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_app_color">#FFFFFF</color>
-    <color name="main_background">#3772E7</color>
-    <color name="main_button_background">#FFFFFF</color>
-    <color name="text_color">#1A1B22</color>
-    <color name="settings_background">#F5F5F5</color>
-    <color name="settings_icon_color">#AEAFB4</color>
+
+    <color name="ys_black">#1A1B22</color>
+    <color name="ys_white">#FFFFFF</color>
+    <color name="ys_blue">#3772E7</color>
+    <color name="ys_text_gray">#AEAFB4</color>
+    <color name="ys_light_gray">#E6E8EB</color>
+    <color name="ys_red">#F56B6C</color>
+    <color name="ys_background">#801A1B22</color>
 </resources>

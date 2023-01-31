@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="background_color" format="reference" />
+    <attr name="settings_background_color" format="reference" />
+    <attr name="settings_text_color" format="reference" />
+    <attr name="settings_icon_color" format="reference" />
+    <attr name="search_background_color" format="reference" />
+    <attr name="search_icon_color" format="reference" />
+    <attr name="search_text_background" format="reference" />
+</resources>
