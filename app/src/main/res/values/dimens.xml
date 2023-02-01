@@ -3,6 +3,9 @@
     <dimen name="title">22sp</dimen>
     <dimen name="main_menu">22sp</dimen>
     <dimen name="settings_menu">16sp</dimen>
+    <dimen name="search_view_album_title">16sp</dimen>
+    <dimen name="search_view_album_author">11sp</dimen>
+    <dimen name="search_view_cover_conver_radius">2dp</dimen>
     <dimen name="main_button_corner_radius">16dp</dimen>
     <dimen name="main_button_icon_padding">10dp</dimen>
     <dimen name="main_button_spacing">16dp</dimen>

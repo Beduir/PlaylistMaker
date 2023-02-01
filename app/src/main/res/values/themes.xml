@@ -19,5 +19,7 @@
         <item name="search_icon_color">@color/ys_text_gray</item>
         <item name="search_background_color">@color/ys_white</item>
         <item name="search_text_background">@color/ys_light_gray</item>
+        <item name="track_list_title">@color/ys_black</item>
+        <item name="track_list_author">@color/ys_text_gray</item>
     </style>
 </resources>
