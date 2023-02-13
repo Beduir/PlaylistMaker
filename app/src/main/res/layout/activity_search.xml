@@ -1,152 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/search_background_color"
-    android:orientation="vertical"
-    android:paddingVertical="14dp"
-    tools:context=".SearchActivity">
+    android:background="?attr/search_background_color">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingVertical="14dp"
+        tools:context=".SearchActivity">
 
         <LinearLayout
-            android:layout_marginBottom="24dp"
-            style="@style/ActivityTitleView"
-            tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:id="@+id/back_button"
-                style="@style/ActivityBackButton"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:text="@string/search"
-                style="@style/ActivityTitle" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="8dp"
-            android:layout_marginBottom="24dp"
-            android:orientation="horizontal"
-            android:background="@drawable/shape"
-            app:cornerRadius="8dp"
-            tools:context=".MainActivity">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
 
-            <EditText
-                android:id="@+id/search_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="0dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:drawableStart="@drawable/search"
-                android:drawablePadding="10dp"
-                android:fontFamily="@font/ys_display_regular"
-                android:hint="@string/search_input_hint"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black"
-                android:textSize="16sp"
-                android:imeOptions="actionDone"
-                android:singleLine="true"
-                style="@style/SearchTextEdit"
-                tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+            <LinearLayout
+                style="@style/ActivityTitleView"
+                android:layout_marginBottom="24dp"
+                tools:ignore="UseCompoundDrawables">
 
-            <ImageView
-                android:id="@+id/clear_icon"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:id="@+id/back_button"
+                    style="@style/ActivityBackButton"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    style="@style/ActivityTitle"
+                    android:text="@string/search" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/clear_search_text"
-                android:src="@drawable/close"
-                android:visibility="gone"
-                tools:ignore="ImageContrastCheck" />
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/shape"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                app:cornerRadius="8dp"
+                tools:context=".MainActivity">
+
+                <EditText
+                    android:id="@+id/search_text"
+                    style="@style/SearchTextEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:drawableStart="@drawable/search"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:hint="@string/search_input_hint"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/ys_black"
+                    android:textColorHint="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+                <ImageView
+                    android:id="@+id/clear_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/clear_search_text"
+                    android:src="@drawable/close"
+                    android:visibility="gone"
+                    tools:ignore="ImageContrastCheck" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="true"
+            android:paddingHorizontal="14dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_result"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="true"
-        android:paddingHorizontal="14dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <LinearLayout
+            android:id="@+id/placeholder_nothing_was_found"
+            style="@style/Placeholder">
 
-    <LinearLayout
-        android:id="@+id/placeholder_nothing_was_found"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:visibility="gone">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="?attr/nothing_was_found" />
+
             <TextView
-                android:text="@string/nothing_was_found"
-                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textAlignment="center"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/ys_display_medium"
-                android:textSize="@dimen/placeholder_message"
-                android:textColor="?attr/placeholder_color"/>
+                android:text="@string/nothing_was_found"
+                android:textAlignment="center"
+                android:textColor="?attr/placeholder_color"
+                android:textSize="@dimen/placeholder_message" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/placeholder_network_issues"
+            style="@style/Placeholder">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="?attr/network_issues" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/network_issues"
+                android:textAlignment="center"
+                android:textColor="?attr/placeholder_color"
+                android:textSize="@dimen/placeholder_message" />
+
+            <Button
+                android:id="@+id/refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="?attr/placeholder_color"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/refresh"
+                android:textAllCaps="false"
+                android:textColor="?attr/search_background_color"
+                android:textSize="@dimen/placeholder_button"
+                app:cornerRadius="54dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/placeholder_network_issues"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:visibility="gone">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="?attr/network_issues" />
-        <TextView
-            android:text="@string/network_issues"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:fontFamily="@font/ys_display_medium"
-            android:textSize="@dimen/placeholder_message"
-            android:textColor="?attr/placeholder_color"/>
-        <Button
-            android:id="@+id/refresh"
-            android:text="@string/refresh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:textSize="@dimen/placeholder_button"
-            android:textColor="?attr/search_background_color"
-            android:textAllCaps="false"
-            android:backgroundTint="?attr/placeholder_color"
-            app:cornerRadius="54dp" />
-    </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>

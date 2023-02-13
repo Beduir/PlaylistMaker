@@ -11,13 +11,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val coverImage: ImageView = itemView.findViewById(R.id.cover_image)
     private val title: TextView = itemView.findViewById(R.id.title)
     private val author: TextView = itemView.findViewById(R.id.author)
     private val duration: TextView = itemView.findViewById(R.id.duration)
     private val cornerRadius: Int = itemView.resources.getDimensionPixelSize(
-        R.dimen.search_view_cover_conver_radius)
+        R.dimen.search_view_cover_conver_radius
+    )
 
     fun bind(track: Track) {
         title.text = track.trackName
@@ -32,11 +33,12 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     }
 }
 
-class TrackAdapter(): RecyclerView.Adapter<TrackViewHolder> () {
+class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
     var tracks = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.track_list_view, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.track_list_view, parent, false)
         return TrackViewHolder(view)
     }
 
@@ -45,4 +47,8 @@ class TrackAdapter(): RecyclerView.Adapter<TrackViewHolder> () {
     }
 
     override fun getItemCount(): Int = tracks.size
+
+    fun clearTracks() {
+        tracks.clear()
+    }
 }

@@ -1,7 +1,6 @@
 package com.beduir.playlistmaker
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,21 +21,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        const val SEARCH_TEXT = "SEARCH_TEXT"
-        const val SEARCH_TEXT_POSITION = "SEARCH_TEXT_POSITION"
-        const val SEARCH_STATE = "SEARCH_STATE"
-        var searchText: String? = "" // Тоже требуется по ТЗ :/
-    }
-
-    enum class SearchStates(val value: Int) {
-        SEARCH_RESULT(1),
-        NETWORK_ISSUES(2),
-        NOTHING_WAS_FOUND(3);
-
-        companion object {
-            private val VALUES = values()
-            fun getByValue(value: Int) = VALUES.firstOrNull { it.value == value }
-        }
+        const private val SEARCH_TEXT = "SEARCH_TEXT"
+        const private val SEARCH_TEXT_POSITION = "SEARCH_TEXT_POSITION"
+        const private val SEARCH_STATE = "SEARCH_STATE"
+        const private val I_TUNES_API_URL = "https://itunes.apple.com"
     }
 
     // Реализуем сохранение, как требуется в ТЗ. Хотя для TextEdit оно и так само работает.
@@ -45,17 +33,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderNothingWasFound: LinearLayout
     private lateinit var placeholderNetworkIssues: LinearLayout
 
-    private val iTunesAPIUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
-        .baseUrl(iTunesAPIUrl)
+        .baseUrl(I_TUNES_API_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val iTunesService = retrofit.create(iTunesAPI::class.java)
 
-    private val tracks = ArrayList<Track>()
     private val trackAdapter = TrackAdapter()
 
     private var searchState: SearchStates = SearchStates.SEARCH_RESULT
+    private var searchText: String? = "" // Тоже требуется по ТЗ :/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,24 +56,31 @@ class SearchActivity : AppCompatActivity() {
         placeholderNothingWasFound = findViewById<LinearLayout>(R.id.placeholder_nothing_was_found)
         placeholderNetworkIssues = findViewById<LinearLayout>(R.id.placeholder_network_issues)
 
-        trackAdapter.tracks = tracks
         searchResult.adapter = trackAdapter
 
         if (savedInstanceState != null) {
             searchText = savedInstanceState.getString(SEARCH_TEXT, "")
             inputSearchText.setText(searchText)
-            inputSearchText.setSelection(savedInstanceState.getInt(
-                SEARCH_TEXT_POSITION, 0))
-            setSearchState(SearchStates.getByValue(savedInstanceState.getInt(SEARCH_STATE,
-                SearchStates.SEARCH_RESULT.value))!!)
+            inputSearchText.setSelection(
+                savedInstanceState.getInt(
+                    SEARCH_TEXT_POSITION, 0
+                )
+            )
+            setSearchState(
+                SearchStates.getByValue(
+                    savedInstanceState.getInt(
+                        SEARCH_STATE,
+                        SearchStates.SEARCH_RESULT.value
+                    )
+                )!!
+            )
         }
 
         clearButton.setOnClickListener {
             if (searchResult.visibility == View.GONE) {
                 setSearchState(SearchStates.SEARCH_RESULT)
-            }
-            else {
-                tracks.clear()
+            } else {
+                trackAdapter.tracks.clear()
                 trackAdapter.notifyDataSetChanged()
             }
             inputSearchText.setText("")
@@ -114,12 +108,11 @@ class SearchActivity : AppCompatActivity() {
         inputSearchText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search(inputSearchText.text.toString())
-                true
             }
             false
         }
 
-        refreshButton.setOnClickListener{
+        refreshButton.setOnClickListener {
             search(inputSearchText.text.toString())
         }
 
@@ -150,15 +143,17 @@ class SearchActivity : AppCompatActivity() {
         iTunesService
             .search(text)
             .enqueue(object : Callback<TracksResponse> {
-                override fun onResponse(call: Call<TracksResponse>,
-                                        response: Response<TracksResponse>) {
+                override fun onResponse(
+                    call: Call<TracksResponse>,
+                    response: Response<TracksResponse>
+                ) {
                     if (response.code() == 200) {
-                        tracks.clear()
+                        trackAdapter.tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
-                            tracks.addAll(response.body()?.results!!)
+                            trackAdapter.tracks.addAll(response.body()?.results!!)
                             trackAdapter.notifyDataSetChanged()
                         }
-                        if (tracks.isEmpty()) {
+                        if (trackAdapter.tracks.isEmpty()) {
                             setSearchState(SearchStates.NOTHING_WAS_FOUND)
                         }
                     } else {
@@ -177,7 +172,8 @@ class SearchActivity : AppCompatActivity() {
         if (searchState == state) {
             return
         }
-        searchResult.visibility = if (state == SearchStates.SEARCH_RESULT) View.VISIBLE else View.GONE
+        searchResult.visibility =
+            if (state == SearchStates.SEARCH_RESULT) View.VISIBLE else View.GONE
         when (state) {
             SearchStates.NETWORK_ISSUES -> placeholderNetworkIssues.visibility = View.VISIBLE
             SearchStates.NOTHING_WAS_FOUND -> placeholderNothingWasFound.visibility = View.VISIBLE
