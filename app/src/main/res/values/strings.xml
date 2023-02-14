@@ -16,4 +16,7 @@
     <string name="finish">Выход</string>
     <string name="clear_search_text">Очистить поисковый запрос</string>
     <string name="cover">Обложка</string>
+    <string name="nothing_was_found">Ничего не нашлось</string>
+    <string name="network_issues">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="refresh">Обновить</string>
 </resources>

@@ -9,4 +9,7 @@
     <attr name="search_text_background" format="reference" />
     <attr name="track_list_title" format="reference" />
     <attr name="track_list_author" format="reference" />
+    <attr name="placeholder_color" format="color" />
+    <attr name="network_issues" format="reference" />
+    <attr name="nothing_was_found" format="reference"></attr>
 </resources>
