@@ -10,7 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -30,8 +30,8 @@ class SearchActivity : AppCompatActivity() {
     // Реализуем сохранение, как требуется в ТЗ. Хотя для TextEdit оно и так само работает.
     private lateinit var inputSearchText: EditText
     private lateinit var searchResult: RecyclerView
-    private lateinit var placeholderNothingWasFound: LinearLayout
-    private lateinit var placeholderNetworkIssues: LinearLayout
+    private lateinit var placeholderNothingWasFound: ScrollView
+    private lateinit var placeholderNetworkIssues: ScrollView
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(I_TUNES_API_URL)
@@ -53,8 +53,8 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clear_icon)
         searchResult = findViewById<RecyclerView>(R.id.search_result)
         val refreshButton = findViewById<Button>(R.id.refresh)
-        placeholderNothingWasFound = findViewById<LinearLayout>(R.id.placeholder_nothing_was_found)
-        placeholderNetworkIssues = findViewById<LinearLayout>(R.id.placeholder_network_issues)
+        placeholderNothingWasFound = findViewById<ScrollView>(R.id.placeholder_nothing_was_found)
+        placeholderNetworkIssues = findViewById<ScrollView>(R.id.placeholder_network_issues)
 
         searchResult.adapter = trackAdapter
 
