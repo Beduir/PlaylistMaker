@@ -23,7 +23,9 @@ class SettingsActivity : AppCompatActivity() {
         val userAgreementButton = findViewById<TextView>(R.id.user_agreement)
         var darkThemeSwitch = findViewById<Switch>(R.id.dark_theme)
 
-        darkThemeSwitch.isChecked = getDarkThemeState()
+        val sharedPrefs = getSharedPreferences(SETTINGS_PREFERENCES, MODE_PRIVATE)
+
+        darkThemeSwitch.isChecked = (applicationContext as App).darkTheme
 
         backButton.setOnClickListener {
             finish()
@@ -54,17 +56,11 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        darkThemeSwitch.setOnCheckedChangeListener { button, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-            }
+        darkThemeSwitch.setOnCheckedChangeListener { switcher, checked ->
+            sharedPrefs.edit()
+                .putBoolean(DARK_THEME_ENABLED, checked)
+                .apply()
+            (applicationContext as App).switchTheme(checked)
         }
-    }
-
-    private fun getDarkThemeState(): Boolean {
-        return resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_YES == Configuration.UI_MODE_NIGHT_YES
     }
 }
