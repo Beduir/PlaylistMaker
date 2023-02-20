@@ -35,7 +35,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
     var tracks = ArrayList<Track>()
-    var itemClickListener: ((Int, Track) -> Unit)? = null
+    var itemClickListener: ((Track) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view =
@@ -46,7 +46,7 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = tracks.get(holder.adapterPosition)
         holder.bind(track)
-        holder.itemView.setOnClickListener { itemClickListener?.invoke(holder.adapterPosition, track) }
+        holder.itemView.setOnClickListener { itemClickListener?.invoke(track) }
     }
 
     override fun getItemCount(): Int = tracks.size

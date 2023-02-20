@@ -150,10 +150,10 @@ class SearchActivity : AppCompatActivity() {
             clearTrackHistory()
         }
 
-        trackAdapter.itemClickListener = { _, track ->
+        trackAdapter.itemClickListener = { track ->
             addTrackToHistory(track)
         }
-        historyAdapter.itemClickListener = { _, track ->
+        historyAdapter.itemClickListener = { track ->
             addTrackToHistory(track)
         }
     }
