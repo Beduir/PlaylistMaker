@@ -13,4 +13,5 @@
     <dimen name="settings_button_vertical_padding">24dp</dimen>
     <dimen name="placeholder_message">19sp</dimen>
     <dimen name="placeholder_button">14sp</dimen>
+    <dimen name="player_cover_conver_radius">8dp</dimen>
 </resources>
