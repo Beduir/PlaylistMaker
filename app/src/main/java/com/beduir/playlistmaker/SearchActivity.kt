@@ -164,7 +164,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun openPlayer(track: Track) {
         val playerIntent = Intent(this, PlayerActivity::class.java)
-        playerIntent.putExtra("track", track)
+        playerIntent.putExtra(PlayerActivity.TRACK_VALUE, track)
         startActivity(playerIntent)
     }
 

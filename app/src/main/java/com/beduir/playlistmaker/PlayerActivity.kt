@@ -13,7 +13,7 @@ import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
     companion object {
-        const private val TRACK_VALUE = "track"
+        const val TRACK_VALUE = "track"
     }
 
     private var track: Track? = null
