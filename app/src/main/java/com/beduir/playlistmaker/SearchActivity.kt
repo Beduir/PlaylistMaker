@@ -1,6 +1,7 @@
 package com.beduir.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -152,10 +153,19 @@ class SearchActivity : AppCompatActivity() {
 
         trackAdapter.itemClickListener = { track ->
             addTrackToHistory(track)
+            openPlayer(track)
         }
+
         historyAdapter.itemClickListener = { track ->
             addTrackToHistory(track)
+            openPlayer(track)
         }
+    }
+
+    private fun openPlayer(track: Track) {
+        val playerIntent = Intent(this, PlayerActivity::class.java)
+        playerIntent.putExtra(PlayerActivity.TRACK_VALUE, track)
+        startActivity(playerIntent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

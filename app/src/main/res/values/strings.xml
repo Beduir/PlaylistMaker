@@ -21,4 +21,13 @@
     <string name="refresh">Обновить</string>
     <string name="search_history">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="cover_image">Изображение обложки</string>
+    <string name="track_country">Страна</string>
+    <string name="track_genre">Жанр</string>
+    <string name="track_year">Год</string>
+    <string name="track_album">Альбом</string>
+    <string name="track_duration">Длительность</string>
+    <string name="play_button">Воспроизвести</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="add_to_favorites">Добавить в избранное</string>
 </resources>
