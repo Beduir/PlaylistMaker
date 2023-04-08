@@ -3,6 +3,8 @@ package com.beduir.playlistmaker
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -22,12 +24,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        const private val SEARCH_TEXT = "SEARCH_TEXT"
-        const private val SEARCH_TEXT_POSITION = "SEARCH_TEXT_POSITION"
-        const private val SEARCH_STATE = "SEARCH_STATE"
-        const private val I_TUNES_API_URL = "https://itunes.apple.com"
-        const private val SEARCH_PREFERENCES = "search"
-        const private val SEARCH_HISTORY = "search_history"
+        private const val SEARCH_TEXT = "SEARCH_TEXT"
+        private const val SEARCH_TEXT_POSITION = "SEARCH_TEXT_POSITION"
+        private const val SEARCH_STATE = "SEARCH_STATE"
+        private const val I_TUNES_API_URL = "https://itunes.apple.com"
+        private const val SEARCH_PREFERENCES = "search"
+        private const val SEARCH_HISTORY = "search_history"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     // Реализуем сохранение, как требуется в ТЗ. Хотя для TextEdit оно и так само работает.
@@ -37,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderNothingWasFound: ScrollView
     private lateinit var placeholderNetworkIssues: ScrollView
     private lateinit var history: LinearLayout
+    private lateinit var progressBar: ProgressBar
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(I_TUNES_API_URL)
@@ -49,6 +54,11 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchState: SearchStates = SearchStates.SEARCH_RESULT
     private var searchText: String? = "" // Тоже требуется по ТЗ :/
+    private val searchRunnable = Runnable { search() }
+
+    private var isTrackClickAllowed = true
+
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +73,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderNothingWasFound = findViewById<ScrollView>(R.id.placeholder_nothing_was_found)
         placeholderNetworkIssues = findViewById<ScrollView>(R.id.placeholder_network_issues)
         history = findViewById<LinearLayout>(R.id.history)
+        progressBar = findViewById<ProgressBar>(R.id.progress_bar)
         val clearHistory = findViewById<Button>(R.id.clear_history)
 
         searchResult.adapter = trackAdapter
@@ -115,6 +126,7 @@ class SearchActivity : AppCompatActivity() {
                 else {
                     setSearchState(searchState)
                 }
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -123,12 +135,12 @@ class SearchActivity : AppCompatActivity() {
         }
         inputSearchText.addTextChangedListener(simpleTextWatcher)
 
-        inputSearchText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search(inputSearchText.text.toString())
-            }
-            false
-        }
+//        inputSearchText.setOnEditorActionListener { _, actionId, _ ->
+//            if (actionId == EditorInfo.IME_ACTION_DONE) {
+//                search()
+//            }
+//            false
+//        }
 
         inputSearchText.setOnFocusChangeListener { view, hasFocus ->
             if (hasFocus && inputSearchText.text.isEmpty() && historyAdapter.tracks.size > 0) {
@@ -140,7 +152,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         refreshButton.setOnClickListener {
-            search(inputSearchText.text.toString())
+            searchDebounce()
         }
 
         backButton.setOnClickListener {
@@ -152,11 +164,25 @@ class SearchActivity : AppCompatActivity() {
         }
 
         trackAdapter.itemClickListener = { track ->
-            addTrackToHistory(track)
-            openPlayer(track)
+            onTrackClick(track)
         }
 
         historyAdapter.itemClickListener = { track ->
+            onTrackClick(track)
+        }
+    }
+
+    private fun trackClickDebounce() : Boolean {
+        val current = isTrackClickAllowed
+        if (isTrackClickAllowed) {
+            isTrackClickAllowed = false
+            handler.postDelayed({ isTrackClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    private fun onTrackClick(track: Track) {
+        if (trackClickDebounce()) {
             addTrackToHistory(track)
             openPlayer(track)
         }
@@ -185,16 +211,29 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun search(text: String) {
-        setSearchState(SearchStates.SEARCH_RESULT)
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun search() {
+        if (inputSearchText.text.toString().isEmpty()) {
+            return
+        }
         history.visibility = View.GONE
+        searchResult.visibility = View.GONE
+        placeholderNothingWasFound.visibility = View.GONE
+        placeholderNetworkIssues.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
         iTunesService
-            .search(text)
+            .search(inputSearchText.text.toString())
             .enqueue(object : Callback<TracksResponse> {
                 override fun onResponse(
                     call: Call<TracksResponse>,
                     response: Response<TracksResponse>
                 ) {
+                    progressBar.visibility = View.GONE
+                    setSearchState(SearchStates.SEARCH_RESULT)
                     if (response.code() == 200) {
                         trackAdapter.tracks.clear()
                         if (response.body()?.results?.isNotEmpty() == true) {
@@ -210,6 +249,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                    progressBar.visibility = View.GONE
                     setSearchState(SearchStates.NETWORK_ISSUES)
                 }
 
