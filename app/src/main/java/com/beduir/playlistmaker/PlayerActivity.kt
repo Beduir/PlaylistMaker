@@ -1,7 +1,11 @@
 package com.beduir.playlistmaker
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +18,14 @@ import java.util.*
 class PlayerActivity : AppCompatActivity() {
     companion object {
         const val TRACK_VALUE = "track"
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+        private const val UPDATE_PLAYBACK_PROGRESS_DELAY = 300L
     }
+
+    private var playerState = STATE_DEFAULT
 
     private var track: Track? = null
 
@@ -30,6 +41,11 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var trackGenre: TextView
     private lateinit var trackCountry: TextView
     private lateinit var time: TextView
+    private lateinit var play: ImageButton
+
+    private var mediaPlayer = MediaPlayer()
+
+    private var mainThreadHandler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +54,7 @@ class PlayerActivity : AppCompatActivity() {
         val backButton = findViewById<ImageView>(R.id.back_button)
 
         initViews()
+        play.isEnabled = false
 
         if (savedInstanceState != null) {
             track = savedInstanceState.getSerializable(TRACK_VALUE) as? Track
@@ -53,7 +70,26 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
+        preparePlayer()
+
+        play.setOnClickListener {
+            playbackControl()
+        }
+
+        mainThreadHandler = Handler(Looper.getMainLooper())
+
         displayTrackInfo(track!!)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainThreadHandler?.removeCallbacks(::updatePlaybackProgress)
+        mediaPlayer.release()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -75,6 +111,7 @@ class PlayerActivity : AppCompatActivity() {
         trackGenre = findViewById<TextView>(R.id.genre_value)
         trackCountry = findViewById<TextView>(R.id.country_value)
         time = findViewById<TextView>(R.id.time)
+        play = findViewById<ImageButton>(R.id.play)
     }
 
     private fun displayTrackInfo(track: Track) {
@@ -88,11 +125,11 @@ class PlayerActivity : AppCompatActivity() {
         trackArtist.text = track.artistName
         trackDuration.text = SimpleDateFormat("mm:ss", Locale.getDefault())
             .format(track.trackTimeMillis)
-        if (track.collectionName!!.isNotEmpty()) {
-            trackAlbum.text = track.collectionName
-        } else {
+        if (track.collectionName.isNullOrEmpty()) {
             trackAlbum.visibility = View.GONE
             album.visibility = View.GONE
+        } else {
+            trackAlbum.text = track.collectionName
         }
         trackYear.text = getYearFromDate(track.releaseDate!!)
         trackGenre.text = track.primaryGenreName!!
@@ -112,5 +149,62 @@ class PlayerActivity : AppCompatActivity() {
         } catch (e: IllegalArgumentException) {
         }
         return year
+    }
+
+    private fun preparePlayer() {
+        if (track!!.previewUrl.isNullOrEmpty()) {
+            return
+        }
+        mediaPlayer.setDataSource(track!!.previewUrl)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            play.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            play.setImageResource(R.drawable.play_button)
+            playerState = STATE_PREPARED
+            time.text = "00:00"
+            mainThreadHandler?.removeCallbacks(::updatePlaybackProgress)
+        }
+    }
+
+    private fun updatePlaybackProgress(): Runnable {
+        return object : Runnable {
+            override fun run() {
+                if (playerState == STATE_PLAYING) {
+                    time.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+                        .format(mediaPlayer.currentPosition)
+                    mainThreadHandler?.postDelayed(this, UPDATE_PLAYBACK_PROGRESS_DELAY)
+                }
+            }
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        play.setImageResource(R.drawable.pause_button)
+        playerState = STATE_PLAYING
+        mainThreadHandler?.post(
+            updatePlaybackProgress()
+        )
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        play.setImageResource(R.drawable.play_button)
+        playerState = STATE_PAUSED
+        mainThreadHandler?.removeCallbacks(::updatePlaybackProgress)
+    }
+
+    private fun playbackControl() {
+        when(playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
     }
 }
