@@ -7,7 +7,7 @@
     android:background="?attr/search_background_color"
     android:orientation="vertical"
     android:paddingVertical="14dp"
-    tools:context=".SearchActivity">
+    tools:context=".search.presentation.SearchActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
