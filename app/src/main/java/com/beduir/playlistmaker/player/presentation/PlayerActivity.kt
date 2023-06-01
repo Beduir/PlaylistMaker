@@ -1,28 +1,26 @@
 package com.beduir.playlistmaker.player.presentation
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.beduir.playlistmaker.R
-import com.beduir.playlistmaker.player.data.Player
-import com.beduir.playlistmaker.player.domain.PlayerInteractor
-import com.beduir.playlistmaker.search.domain.Track
+import com.beduir.playlistmaker.creator.Creator
+import com.beduir.playlistmaker.search.domain.models.Track
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
-class PlayerActivity : AppCompatActivity(), PlayerView {
+class PlayerActivity : AppCompatActivity() {
     companion object {
         const val TRACK_VALUE = "track"
     }
 
-    private lateinit var track: Track
+    private lateinit var viewModel: PlayerViewModel
 
     private var cornerRadius: Int = 0
 
@@ -39,60 +37,78 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
     private lateinit var play: ImageButton
     private lateinit var backButton: ImageView
 
-    private lateinit var presenter: PlayerPresenter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
         initViews()
 
-        track = if (savedInstanceState != null) {
-            savedInstanceState.getSerializable(TRACK_VALUE) as? Track ?: Track()
-        } else {
-            intent.getSerializableExtra(TRACK_VALUE) as? Track ?: Track()
-        }
-
         cornerRadius = this.resources.getDimensionPixelSize(
             R.dimen.player_cover_conver_radius
         )
 
-        presenter = PlayerPresenter(
-            view = this,
-            track = track,
-            interactor = PlayerInteractor(Player()),
-            router = PlayerRouter(this),
-            handler = Handler(Looper.getMainLooper())
-        )
+        viewModel = ViewModelProvider(
+            this, PlayerViewModelFactory(
+                intent.getSerializableExtra(TRACK_VALUE) as? Track ?: Track(),
+                Creator.providePlayerInteractor(),
+                PlayerRouter(this)
+            )
+        )[PlayerViewModel::class.java]
 
         backButton.setOnClickListener {
-            presenter.backButtonClicked()
+            viewModel.goBack()
         }
         play.setOnClickListener {
-            presenter.playButtonClicked()
+            viewModel.playbackButton()
+        }
+
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
+        viewModel.observePlaybackProgress().observe(this) {
+            time.text = it
+        }
+        viewModel.observeTrack().observe(this) {
+            showTrackInfo(it)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        presenter.onViewPaused()
+        viewModel.pause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.onViewDestroyed()
+    private fun initViews() {
+        cover = findViewById(R.id.cover)
+        trackName = findViewById(R.id.track_name)
+        trackArtist = findViewById(R.id.track_artist)
+        trackDuration = findViewById(R.id.duration_value)
+        album = findViewById(R.id.album)
+        trackAlbum = findViewById(R.id.album_value)
+        trackYear = findViewById(R.id.year_value)
+        trackGenre = findViewById(R.id.genre_value)
+        trackCountry = findViewById(R.id.country_value)
+        time = findViewById(R.id.time)
+        play = findViewById(R.id.play)
+        backButton = findViewById(R.id.back_button)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable(TRACK_VALUE, track)
+    private fun render(state: PlayerState) {
+        when (state) {
+            is PlayerState.Initializting -> play.isEnabled = false
+            is PlayerState.Paused -> {
+                play.isEnabled = true
+                play.setImageResource(R.drawable.play_button)
+            }
+
+            is PlayerState.Playing -> {
+                play.isEnabled = true
+                play.setImageResource(R.drawable.pause_button)
+            }
+        }
     }
 
-    override fun initPlayer() {
-        play.isEnabled = false
-    }
-
-    override fun showTrackInfo(track: Track) {
+    private fun showTrackInfo(track: Track) {
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.cover)
@@ -112,40 +128,5 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         trackYear.text = track.getYear()
         trackGenre.text = track.primaryGenreName
         trackCountry.text = track.country
-    }
-
-    override fun playerPrepared() {
-        play.isEnabled = true
-    }
-
-    override fun playbackCompleted() {
-        play.setImageResource(R.drawable.play_button)
-    }
-
-    override fun setPlaybackProgress(progress: String) {
-        time.text = progress
-    }
-
-    override fun playerPaused() {
-        play.setImageResource(R.drawable.play_button)
-    }
-
-    override fun playerPlaying() {
-        play.setImageResource(R.drawable.pause_button)
-    }
-
-    private fun initViews() {
-        cover = findViewById(R.id.cover)
-        trackName = findViewById(R.id.track_name)
-        trackArtist = findViewById(R.id.track_artist)
-        trackDuration = findViewById(R.id.duration_value)
-        album = findViewById(R.id.album)
-        trackAlbum = findViewById(R.id.album_value)
-        trackYear = findViewById(R.id.year_value)
-        trackGenre = findViewById(R.id.genre_value)
-        trackCountry = findViewById(R.id.country_value)
-        time = findViewById(R.id.time)
-        play = findViewById(R.id.play)
-        backButton = findViewById(R.id.back_button)
     }
 }

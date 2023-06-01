@@ -1,31 +1,14 @@
 package com.beduir.playlistmaker.search.domain
 
-import java.util.ArrayList
+import com.beduir.playlistmaker.search.domain.models.Track
 
-class SearchInteractor(
-    private val trackHistory: ITrackHistory,
-    private val repository: ISearchRepository
-): ISearchInteractor {
-    override fun clearHistory() {
-        trackHistory.clearHistory()
-    }
-
-    override fun getHistory(): ArrayList<Track> {
-        return trackHistory.getHistory()
-    }
-
-    override fun addTrack(track: Track) {
-        trackHistory.addTrack(track)
-    }
-
-    override fun loadTracks(query: String, onSuccess: (List<Track>) -> Unit, onError: () -> Unit) {
-        repository.loadTracks(query, onSuccess, onError)
-    }
-}
-
-interface ISearchInteractor {
+interface SearchInteractor {
     fun clearHistory()
     fun getHistory(): ArrayList<Track>
     fun addTrack(track: Track)
-    fun loadTracks(query: String, onSuccess: (List<Track>) -> Unit, onError: () -> Unit)
+    fun searchTracks(expression: String, consumer: TracksConsumer)
+
+    interface TracksConsumer {
+        fun consume(foundTracks: List<Track>?, errorMessage: String?)
+    }
 }
