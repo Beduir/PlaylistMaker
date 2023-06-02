@@ -10,8 +10,7 @@ import com.beduir.playlistmaker.search.domain.SearchInteractor
 import com.beduir.playlistmaker.search.domain.models.Track
 
 class SearchViewModel(
-    private val interactor: SearchInteractor,
-    private val router: SearchRouter
+    private val interactor: SearchInteractor
 ) : ViewModel() {
 
     companion object {
@@ -94,11 +93,6 @@ class SearchViewModel(
 
     fun openTrack(track: Track) {
         interactor.addTrack(track)
-        router.openTrack(track)
-    }
-
-    fun goBack() {
-        router.goBack()
     }
 
     private fun searchRequest(newSearchText: String) {

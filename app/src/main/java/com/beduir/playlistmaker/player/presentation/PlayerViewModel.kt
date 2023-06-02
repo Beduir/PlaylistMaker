@@ -12,8 +12,7 @@ import java.util.Locale
 
 class PlayerViewModel(
     track: Track,
-    private val interactor: PlayerInteractor,
-    private val router: PlayerRouter
+    private val interactor: PlayerInteractor
 ) : ViewModel() {
 
     companion object {
@@ -51,10 +50,6 @@ class PlayerViewModel(
     override fun onCleared() {
         handler.removeCallbacks(::updatePlaybackProgress)
         interactor.releasePlayer()
-    }
-
-    fun goBack() {
-        router.goBack()
     }
 
     fun playbackButton() {

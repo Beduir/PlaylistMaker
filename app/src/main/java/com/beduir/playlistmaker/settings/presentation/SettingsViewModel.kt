@@ -1,8 +1,8 @@
 package com.beduir.playlistmaker.settings.presentation
 
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
@@ -15,9 +15,8 @@ import com.beduir.playlistmaker.sharing.domain.SharingInteractor
 
 class SettingsViewModel(
     private val sharingInteractor: SharingInteractor,
-    private val settingsInteractor: SettingsInteractor,
-    private val application: App,
-) : AndroidViewModel(application) {
+    private val settingsInteractor: SettingsInteractor
+) : ViewModel() {
 
     private val darkThemeLiveData = MutableLiveData<Boolean>()
 
@@ -30,7 +29,7 @@ class SettingsViewModel(
     fun onDarkThemeSwitchClicked(checked: Boolean) {
         darkThemeLiveData.value = checked
         settingsInteractor.setThemeSetting(ThemeSettings(checked))
-        application.switchTheme(checked)
+        App.getInstance().switchTheme(checked)
     }
 
     fun onShareButtonClicked() {
@@ -52,7 +51,6 @@ class SettingsViewModel(
                 SettingsViewModel(
                     settingsInteractor = Creator.provideSettingsInteractor(application),
                     sharingInteractor = Creator.provideSharingInteractor(application),
-                    application = application,
                 )
             }
         }

@@ -26,6 +26,8 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SearchViewModel
 
+    private lateinit var router: SearchRouter
+
     private lateinit var inputSearchText: EditText
     private lateinit var searchResult: RecyclerView
     private lateinit var historyList: RecyclerView
@@ -51,10 +53,11 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        router = SearchRouter(this)
+
         viewModel = ViewModelProvider(
             this, SearchViewModelFactory(
-                Creator.provideSearchInteractor(this),
-                SearchRouter(this)
+                Creator.provideSearchInteractor(this)
             )
         )[SearchViewModel::class.java]
 
@@ -87,7 +90,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            viewModel.goBack()
+            router.goBack()
         }
 
         clearHistory.setOnClickListener {
@@ -229,6 +232,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onTrackClick(track: Track) {
         if (trackClickDebounce()) {
             viewModel.openTrack(track)
+            router.openTrack(track)
         }
     }
 }

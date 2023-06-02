@@ -7,11 +7,10 @@ import com.beduir.playlistmaker.search.domain.models.Track
 
 class PlayerViewModelFactory(
     private val track: Track,
-    private val interactor: PlayerInteractor,
-    private val router: PlayerRouter
+    private val interactor: PlayerInteractor
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PlayerViewModel(track, interactor, router) as T
+        return PlayerViewModel(track, interactor) as T
     }
 }

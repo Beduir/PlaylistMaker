@@ -22,6 +22,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var viewModel: PlayerViewModel
 
+    private lateinit var router: PlayerRouter
+
     private var cornerRadius: Int = 0
 
     private lateinit var cover: ImageView
@@ -47,16 +49,17 @@ class PlayerActivity : AppCompatActivity() {
             R.dimen.player_cover_conver_radius
         )
 
+        router = PlayerRouter(this)
+
         viewModel = ViewModelProvider(
             this, PlayerViewModelFactory(
                 intent.getSerializableExtra(TRACK_VALUE) as? Track ?: Track(),
-                Creator.providePlayerInteractor(),
-                PlayerRouter(this)
+                Creator.providePlayerInteractor()
             )
         )[PlayerViewModel::class.java]
 
         backButton.setOnClickListener {
-            viewModel.goBack()
+            router.goBack()
         }
         play.setOnClickListener {
             viewModel.playbackButton()
