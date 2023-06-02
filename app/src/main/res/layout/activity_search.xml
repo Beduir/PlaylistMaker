@@ -40,7 +40,7 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp"
             app:cornerRadius="8dp"
-            tools:context=".MainActivity">
+            tools:context=".main.presentation.MainActivity">
 
             <EditText
                 android:id="@+id/search_text"

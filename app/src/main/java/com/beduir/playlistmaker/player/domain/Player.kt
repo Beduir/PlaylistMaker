@@ -1,10 +1,10 @@
 package com.beduir.playlistmaker.player.domain
 
-interface PlayerInteractor {
+interface Player {
     fun preparePlayer(url: String, onPrepared: () -> Unit, onCompletion: () -> Unit)
     fun isPlayerPlaying(): Boolean
     fun currentPosition(): Int
-    fun releasePlayer()
-    fun playerPause()
-    fun playerStart()
+    fun release()
+    fun pause()
+    fun start()
 }
