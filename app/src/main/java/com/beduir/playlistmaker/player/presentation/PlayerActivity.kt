@@ -6,12 +6,14 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.beduir.playlistmaker.R
-import com.beduir.playlistmaker.creator.Creator
 import com.beduir.playlistmaker.search.domain.models.Track
+import com.beduir.playlistmaker.search.presentation.SearchRouter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.gson.Gson
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -20,9 +22,13 @@ class PlayerActivity : AppCompatActivity() {
         const val TRACK_VALUE = "track"
     }
 
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var track: Track
 
-    private lateinit var router: PlayerRouter
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(track)
+    }
+
+    private val router: PlayerRouter by lazy { PlayerRouter(this) }
 
     private var cornerRadius: Int = 0
 
@@ -49,14 +55,7 @@ class PlayerActivity : AppCompatActivity() {
             R.dimen.player_cover_conver_radius
         )
 
-        router = PlayerRouter(this)
-
-        viewModel = ViewModelProvider(
-            this, PlayerViewModelFactory(
-                intent.getSerializableExtra(TRACK_VALUE) as? Track ?: Track(),
-                Creator.providePlayerInteractor()
-            )
-        )[PlayerViewModel::class.java]
+        track = Gson().fromJson(intent.getStringExtra(TRACK_VALUE), Track::class.java) ?: Track()
 
         backButton.setOnClickListener {
             router.goBack()

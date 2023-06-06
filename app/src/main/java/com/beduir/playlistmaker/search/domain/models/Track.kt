@@ -4,6 +4,7 @@ import java.io.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 data class Track(
@@ -22,16 +23,18 @@ data class Track(
         artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 
     fun getYear(): String {
-        var year = ""
-        try {
-            val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                .parse(releaseDate)
-            val calendar = Calendar.getInstance(Locale.getDefault())
-            calendar.time = date
-            year = calendar.get(Calendar.YEAR).toString()
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        return try {
+            val date = formatter.parse(releaseDate)
+            date?.let { getYearFromDate(it) } ?: ""
         } catch (e: ParseException) {
-        } catch (e: IllegalArgumentException) {
+            ""
         }
-        return year
+    }
+
+    private fun getYearFromDate(date: Date): String {
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.time = date
+        return calendar.get(Calendar.YEAR).toString()
     }
 }
