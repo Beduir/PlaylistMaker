@@ -38,16 +38,4 @@ class SettingsViewModel(
     fun onUserAgreementButtonClicked() {
         sharingInteractor.openTerms()
     }
-
-//    companion object {
-//        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-//            initializer {
-//                val application = this[APPLICATION_KEY] as App
-//                SettingsViewModel(
-//                    settingsInteractor = Creator.provideSettingsInteractor(application),
-//                    sharingInteractor = Creator.provideSharingInteractor(application),
-//                )
-//            }
-//        }
-//    }
 }
