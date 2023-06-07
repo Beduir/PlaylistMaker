@@ -2,12 +2,19 @@ package com.beduir.playlistmaker.application
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.beduir.playlistmaker.creator.Creator
+import com.beduir.playlistmaker.di.dataModule
+import com.beduir.playlistmaker.di.interactorModule
+import com.beduir.playlistmaker.di.repositoryModule
+import com.beduir.playlistmaker.di.viewModelModule
+import com.beduir.playlistmaker.settings.domain.SettingsInteractor
+import org.koin.android.ext.android.get
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+
 
 class App : Application() {
     companion object {
         private lateinit var instance: App
-        const val SETTINGS_PREFERENCES = "settings"
 
         fun getInstance(): App {
             return instance
@@ -18,7 +25,13 @@ class App : Application() {
         super.onCreate()
         instance = this
 
-        switchTheme(Creator.provideSettingsInteractor(this).getThemeSettings().darkTheme)
+        startKoin {
+            androidContext(this@App)
+            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+        }
+
+        val settingsInteractor: SettingsInteractor = get()
+        switchTheme(settingsInteractor.getThemeSettings().darkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

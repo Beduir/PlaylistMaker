@@ -40,7 +40,7 @@ class PlayerImpl : Player {
     override fun release() {
         player.setOnPreparedListener { null }
         player.setOnCompletionListener { null }
-        player.release()
+        player.reset()
     }
 
     override fun pause() {

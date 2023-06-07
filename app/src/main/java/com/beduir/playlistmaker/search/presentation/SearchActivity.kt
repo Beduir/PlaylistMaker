@@ -11,22 +11,19 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.beduir.playlistmaker.R
-import com.beduir.playlistmaker.creator.Creator
 import com.beduir.playlistmaker.search.domain.models.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        const val SEARCH_PREFERENCES = "search"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    private lateinit var viewModel: SearchViewModel
-
-    private lateinit var router: SearchRouter
+    private val viewModel: SearchViewModel by viewModel()
+    private val router: SearchRouter by lazy { SearchRouter(this) }
 
     private lateinit var inputSearchText: EditText
     private lateinit var searchResult: RecyclerView
@@ -52,14 +49,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        router = SearchRouter(this)
-
-        viewModel = ViewModelProvider(
-            this, SearchViewModelFactory(
-                Creator.provideSearchInteractor(this)
-            )
-        )[SearchViewModel::class.java]
 
         initViews()
         initAdapter()

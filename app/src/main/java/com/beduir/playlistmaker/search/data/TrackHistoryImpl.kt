@@ -1,5 +1,7 @@
 package com.beduir.playlistmaker.search.data
 
+import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import com.beduir.playlistmaker.search.domain.TrackHistory
 import com.beduir.playlistmaker.search.domain.models.Track
@@ -10,9 +12,17 @@ private const val SEARCH_HISTORY = "search_history"
 private const val HISTORY_SIZE = 10
 
 class TrackHistoryImpl(
-    private val sharedPrefs: SharedPreferences,
+    context: Context,
     private val gson: Gson
 ) : TrackHistory {
+    companion object {
+        const val SEARCH_PREFERENCES = "search"
+    }
+
+    private var sharedPrefs: SharedPreferences = context.getSharedPreferences(
+        SEARCH_PREFERENCES,
+        Application.MODE_PRIVATE
+    )
 
     override fun addTrack(track: Track) {
         val listString = getListString()

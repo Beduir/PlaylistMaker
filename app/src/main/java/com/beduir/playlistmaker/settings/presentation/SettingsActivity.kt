@@ -6,23 +6,17 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.beduir.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
-    private lateinit var viewModel: SettingsViewModel
-    private lateinit var router: SettingsRouter
+    private val viewModel: SettingsViewModel by viewModel()
+    private val router: SettingsRouter by lazy { SettingsRouter(this) }
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        viewModel = ViewModelProvider(
-            this, SettingsViewModel.getViewModelFactory(
-            )
-        )[SettingsViewModel::class.java]
-        router = SettingsRouter(this)
 
         val backButton = findViewById<ImageView>(R.id.back_button)
         val shareButton = findViewById<TextView>(R.id.share)
