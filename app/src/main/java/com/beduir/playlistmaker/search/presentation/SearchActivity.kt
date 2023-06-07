@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     companion object {
-        const val SEARCH_PREFERENCES = "search"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 

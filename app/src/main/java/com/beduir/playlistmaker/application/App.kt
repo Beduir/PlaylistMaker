@@ -15,7 +15,6 @@ import org.koin.core.context.startKoin
 class App : Application() {
     companion object {
         private lateinit var instance: App
-        const val SETTINGS_PREFERENCES = "settings"
 
         fun getInstance(): App {
             return instance

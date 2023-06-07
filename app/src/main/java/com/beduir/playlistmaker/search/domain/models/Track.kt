@@ -1,11 +1,9 @@
 package com.beduir.playlistmaker.search.domain.models
 
+import com.beduir.playlistmaker.util.DateTimeUtil
 import java.io.Serializable
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+
+private const val TRACK_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"
 
 data class Track(
     val trackId: Int = 0,
@@ -23,18 +21,6 @@ data class Track(
         artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 
     fun getYear(): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        return try {
-            val date = formatter.parse(releaseDate)
-            date?.let { getYearFromDate(it) } ?: ""
-        } catch (e: ParseException) {
-            ""
-        }
-    }
-
-    private fun getYearFromDate(date: Date): String {
-        val calendar = Calendar.getInstance(Locale.getDefault())
-        calendar.time = date
-        return calendar.get(Calendar.YEAR).toString()
+        return DateTimeUtil.getYear(TRACK_DATE_FORMAT, releaseDate)
     }
 }
